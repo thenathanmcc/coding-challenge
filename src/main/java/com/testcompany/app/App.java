@@ -38,12 +38,14 @@ public class App
             BigDecimal revenue = calculateTotalRevenue(accounts);
             BigDecimal expenses = calculateTotalExpense(accounts);
             BigDecimal gpm = calculateGrossProfitMargin(revenue, accounts);
+            BigDecimal npm = calculateNetProfitMargin(revenue, expenses);
 
 
             // Output accounting metrics in correct format
             System.out.println("Revenue: " + formatCurrency(revenue));
             System.out.println("Expenses: " + formatCurrency(expenses));
             System.out.println("Gross Profit Margin: " + formatPercentage(gpm));
+            System.out.println("Net Profit Margin: " + formatPercentage(npm));
 
 
         } catch (FileNotFoundException e) {
@@ -123,5 +125,24 @@ public class App
         total_sales_debit = total_sales_debit.divide(total_revenue);
         total_sales_debit = total_sales_debit.multiply(new BigDecimal("100.0"));
         return total_sales_debit;
+    }
+
+    /**
+     * Calculates the Net Profit Margin
+     * @param total_revenue Total revenue from account data
+     * @param expenses Total expenses from account data
+     * @return Net Profit Margin
+     */
+    public static BigDecimal calculateNetProfitMargin(BigDecimal total_revenue, BigDecimal expenses) {
+        if (total_revenue.equals(new BigDecimal("0.0"))) {
+            return new BigDecimal("0.0");
+        }
+        BigDecimal net_profit_margin = new BigDecimal("0.0");
+        net_profit_margin = net_profit_margin.add(total_revenue);
+        net_profit_margin = net_profit_margin.subtract(expenses);
+        net_profit_margin = net_profit_margin.divide(total_revenue, RoundingMode.HALF_UP);
+        net_profit_margin = net_profit_margin.multiply(new BigDecimal("100.0"));
+
+        return net_profit_margin;
     }
 }

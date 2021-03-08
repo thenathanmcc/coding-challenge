@@ -89,4 +89,16 @@ public class AppTest
 
         assertTrue(gpm.equals(new BigDecimal("0.0")));
     }
+
+    /**
+     * Test the Net Profit Margin calculation function with 0 as the total revenue
+     * A value of 0 revenue should not result in a NPM of infinity
+     */
+    @Test
+    public void testNPMZeroRevenue() {
+        ArrayList<Account> accounts = new ArrayList<>();
+        BigDecimal npm = App.calculateNetProfitMargin(new BigDecimal("0.0"), new BigDecimal("32456"));
+
+        assertTrue(npm.equals(new BigDecimal("0.0")));
+    }
 }
