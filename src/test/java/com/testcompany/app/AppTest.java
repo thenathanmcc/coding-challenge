@@ -101,4 +101,15 @@ public class AppTest
 
         assertTrue(npm.equals(new BigDecimal("0.0")));
     }
+
+    /**
+     * Test Working Capital Ratio function when given empty arraylist of accounts
+     */
+    @Test
+    public void testWCRFunction() {
+        ArrayList<Account> accounts = new ArrayList<>();
+        BigDecimal wcr = App.calculateWorkingCapitalRatio(accounts);
+
+        assertTrue(wcr.equals(new BigDecimal("0.0")));
+    }
 }

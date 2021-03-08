@@ -39,13 +39,14 @@ public class App
             BigDecimal expenses = calculateTotalExpense(accounts);
             BigDecimal gpm = calculateGrossProfitMargin(revenue, accounts);
             BigDecimal npm = calculateNetProfitMargin(revenue, expenses);
-
+            BigDecimal wcr = calculateWorkingCapitalRatio(accounts);
 
             // Output accounting metrics in correct format
             System.out.println("Revenue: " + formatCurrency(revenue));
             System.out.println("Expenses: " + formatCurrency(expenses));
             System.out.println("Gross Profit Margin: " + formatPercentage(gpm));
             System.out.println("Net Profit Margin: " + formatPercentage(npm));
+            System.out.println("Working Capital Ratio: " + formatPercentage(wcr));
 
 
         } catch (FileNotFoundException e) {
@@ -144,5 +145,55 @@ public class App
         net_profit_margin = net_profit_margin.multiply(new BigDecimal("100.0"));
 
         return net_profit_margin;
+    }
+
+    /**
+     * Calculates the Working Capital Ratio from account data
+     * @param accounts ArrayList of accounts
+     * @return Working Capital Ratio
+     */
+    public static BigDecimal calculateWorkingCapitalRatio(ArrayList<Account> accounts) {
+        if (accounts.size() == 0) {
+            return new BigDecimal("0.0");
+        }
+        BigDecimal assets = new BigDecimal("0.0");
+        BigDecimal liabilities = new BigDecimal("0.0");
+        BigDecimal working_capital_ratio = new BigDecimal("0.0");
+
+        // Calculate total asset value
+        for (Account account : accounts) {
+            if (account.getAccountCategory().equals("assets") &&
+                    (account.getAccountType().equals("current") ||
+                            account.getAccountType().equals("bank") ||
+                            account.getAccountType().equals("current_accounts_receivable"))) {
+
+                if (account.getValueType().equals("debit")) {
+                    assets = assets.add(account.getTotalValue());
+                } else if (account.getValueType().equals("credit")) {
+                    assets = assets.subtract(account.getTotalValue());
+                }
+            }
+        }
+
+        // Calculate total liability value
+        for (Account account : accounts) {
+            if (account.getAccountCategory().equals("liability") &&
+                    (account.getAccountType().equals("current") ||
+                            account.getAccountType().equals("bank") ||
+                            account.getAccountType().equals("current_accounts_receivable"))) {
+
+                if (account.getValueType().equals("debit")) {
+                    liabilities = liabilities.add(account.getTotalValue());
+                } else if (account.getValueType().equals("credit")) {
+                    liabilities = liabilities.subtract(account.getTotalValue());
+                }
+            }
+        }
+
+        working_capital_ratio = working_capital_ratio.add(assets);
+        working_capital_ratio = working_capital_ratio.divide(liabilities, RoundingMode.HALF_UP);
+        working_capital_ratio = working_capital_ratio.multiply(new BigDecimal("100.0"));
+
+        return working_capital_ratio;
     }
 }
