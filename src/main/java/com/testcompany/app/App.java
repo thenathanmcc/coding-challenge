@@ -1,8 +1,7 @@
 package com.testcompany.app;
 
 /**
- * Hello world!
- *
+ * Application Entry Point
  */
 public class App 
 {
