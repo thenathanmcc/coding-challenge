@@ -36,10 +36,12 @@ public class App
 
             // Calculate the five accounting metrics
             BigDecimal revenue = calculateTotalRevenue(accounts);
+            BigDecimal expenses = calculateTotalExpense(accounts);
 
 
             // Output accounting metrics in correct format
             System.out.println("Revenue: " + formatCurrency(revenue));
+            System.out.println("Expenses: " + formatCurrency(expenses));
 
 
         } catch (FileNotFoundException e) {
@@ -73,5 +75,20 @@ public class App
             }
         }
         return total_revenue;
+    }
+
+    /**
+     * Calculates the total expenses from the account data
+     * @param accounts ArrayList of accounts
+     * @return total expenses
+     */
+    public static BigDecimal calculateTotalExpense(ArrayList<Account> accounts){
+        BigDecimal total_expense = new BigDecimal("0.0");
+        for (Account account : accounts) {
+            if (account.getAccountCategory().equals("expense")) {
+                total_expense = total_expense.add(account.getTotalValue());
+            }
+        }
+        return total_expense;
     }
 }
