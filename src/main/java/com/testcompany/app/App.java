@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -33,6 +34,13 @@ public class App
                 accounts.add(new Account((JsonObject) iterator.next()));
             }
 
+            // Calculate the five accounting metrics
+            BigDecimal revenue = calculateTotalRevenue(accounts);
+
+
+            // Output accounting metrics in correct format
+            System.out.println("Revenue: " + formatCurrency(revenue));
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -41,6 +49,15 @@ public class App
         } catch (JsonException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Formats a monetary value with a comma separating every 3 digits and removing cents
+     * @param monetary_value
+     * @return formatted monetary value
+     */
+    public static String formatCurrency(BigDecimal monetary_value) {
+        return "\\$" + String.format("%,.0f", monetary_value.setScale(2, RoundingMode.HALF_UP));
     }
 
     /**

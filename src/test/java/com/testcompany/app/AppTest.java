@@ -22,4 +22,26 @@ public class AppTest
 
         assertTrue(total_revenue.equals(new BigDecimal("0.0")));
     }
+
+    /**
+     * Test the currency formatting function for very large dollar values i.e Trillions
+     */
+    @Test
+    public void testLargeMonetaryValueFormat() {
+        BigDecimal total_revenue = new BigDecimal("987654321123456.42");
+        String formatted_revenue = App.formatCurrency(total_revenue);
+
+        assertTrue(formatted_revenue.equals("\\$987,654,321,123,456"));
+    }
+
+    /**
+     * Test the currency formatting function for a dollar value of 0
+     */
+    @Test
+    public void testZeroMonetaryValueFormat() {
+        BigDecimal total_revenue = new BigDecimal("0.0");
+        String formatted_revenue = App.formatCurrency(total_revenue);
+
+        assertTrue(formatted_revenue.equals("\\$0"));
+    }
 }
