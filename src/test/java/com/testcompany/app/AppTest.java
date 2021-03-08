@@ -55,4 +55,38 @@ public class AppTest
 
         assertTrue(expense.equals(new BigDecimal("0.0")));
     }
+
+    /**
+     * Test percentage formatting function rounding correctness
+     */
+    @Test
+    public void testPercentageFormatRounding() {
+        BigDecimal percentage = new BigDecimal("13.123415");
+        String formatted_percentage = App.formatPercentage(percentage);
+
+        assertTrue(formatted_percentage.equals("13.1%"));
+    }
+
+    /**
+     * Test percentage formatting function rounding up correctly
+     */
+    @Test
+    public void testPercentageFormatRoundUp() {
+        BigDecimal percentage = new BigDecimal("13.153415");
+        String formatted_percentage = App.formatPercentage(percentage);
+
+        assertTrue(formatted_percentage.equals("13.2%"));
+    }
+
+    /**
+     * Test the Gross Profit Margin calculation function with 0 as the total revenue
+     * A value of 0 revenue should not result in a GPM of infinity
+     */
+    @Test
+    public void testGPMZeroRevenue() {
+        ArrayList<Account> accounts = new ArrayList<>();
+        BigDecimal gpm = App.calculateGrossProfitMargin(new BigDecimal("0.0"), accounts);
+
+        assertTrue(gpm.equals(new BigDecimal("0.0")));
+    }
 }
