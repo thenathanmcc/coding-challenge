@@ -1,5 +1,24 @@
 # 9Spokes Coding Challenge
 
+## My Solution
+
+I have completed the project using java-1.13.0-openjdk-amd64 and maven-3.6.3. To run the unit tests, use:
+
+```
+mvn test
+```
+
+To build the project, use:
+
+```
+mvn clean compile assembly:single
+```
+
+To run, use:
+```
+java -cp target/coding-challenge-1.0-SNAPSHOT-jar-with-dependencies.jar com.testcompany.app.App
+```
+
 ## Overview
 
 This repo contains the instructions and the data you need to complete the _9Spokes coding challenge_.  This challenge is not intended to be complex, but it is an opportunity for you to showcase your understanding and applying of good development practices.
