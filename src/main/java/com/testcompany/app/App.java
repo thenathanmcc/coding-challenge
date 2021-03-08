@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -18,6 +19,7 @@ public class App
 {
     public static void main( String[] args )
     {
+        ArrayList<Account> accounts = new ArrayList<>();
 
         try (FileReader reader = new FileReader("./data.json"))
         {
@@ -25,7 +27,11 @@ public class App
             JsonObject obj = (JsonObject) Jsoner.deserialize(reader);
             JsonArray data = (JsonArray) obj.get("data");
 
-            System.out.println(data);
+            // Parse JSON data and store in account objects
+            Iterator<Object> iterator = data.iterator();
+            while (iterator.hasNext()) {
+                accounts.add(new Account((JsonObject) iterator.next()));
+            }
 
 
         } catch (FileNotFoundException e) {
@@ -35,5 +41,20 @@ public class App
         } catch (JsonException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Calculates the total revenue from account data
+     * @param accounts ArrayList of accounts
+     * @return total revenue
+     */
+    public static BigDecimal calculateTotalRevenue(ArrayList<Account> accounts){
+        BigDecimal total_revenue = new BigDecimal("0.0");
+        for (Account account : accounts) {
+            if (account.getAccountCategory().equals("revenue")) {
+                total_revenue = total_revenue.add(account.getTotalValue());
+            }
+        }
+        return total_revenue;
     }
 }
