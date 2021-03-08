@@ -44,4 +44,15 @@ public class AppTest
 
         assertTrue(formatted_revenue.equals("\\$0"));
     }
+
+    /**
+     * Test expenses calculation function when given empty arraylist of accounts
+     */
+    @Test
+    public void testExpensesArrayListEmpty() {
+        ArrayList<Account> accounts = new ArrayList<>();
+        BigDecimal expense = App.calculateTotalExpense(accounts);
+
+        assertTrue(expense.equals(new BigDecimal("0.0")));
+    }
 }
