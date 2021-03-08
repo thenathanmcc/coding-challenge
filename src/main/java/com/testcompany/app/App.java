@@ -37,11 +37,13 @@ public class App
             // Calculate the five accounting metrics
             BigDecimal revenue = calculateTotalRevenue(accounts);
             BigDecimal expenses = calculateTotalExpense(accounts);
+            BigDecimal gpm = calculateGrossProfitMargin(revenue, accounts);
 
 
             // Output accounting metrics in correct format
             System.out.println("Revenue: " + formatCurrency(revenue));
             System.out.println("Expenses: " + formatCurrency(expenses));
+            System.out.println("Gross Profit Margin: " + formatPercentage(gpm));
 
 
         } catch (FileNotFoundException e) {
@@ -51,6 +53,15 @@ public class App
         } catch (JsonException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Formats a percentage to one decimal place
+     * @param percentage
+     * @return formatted percentage
+     */
+    public static String formatPercentage(BigDecimal percentage){
+        return String.format("%,.1f", percentage.setScale(2, RoundingMode.HALF_UP)) + "%";
     }
 
     /**
@@ -90,5 +101,27 @@ public class App
             }
         }
         return total_expense;
+    }
+
+    /**
+     * Calculates the Gross Profit Margin(GPM)
+     * @param total_revenue Total revenue from all accounts
+     * @param accounts ArrayList of accounts
+     * @return Gross Profit Margin
+     */
+    public static BigDecimal calculateGrossProfitMargin(BigDecimal total_revenue, ArrayList<Account> accounts) {
+        if (total_revenue.equals( new BigDecimal("0.0"))) {
+            return new BigDecimal("0.0");
+        }
+
+        BigDecimal total_sales_debit = new BigDecimal("0.0");
+        for (Account account : accounts) {
+            if (account.getAccountType().equals("sales") && account.getValueType().equals("debit")) {
+                total_sales_debit = total_sales_debit.add(account.getTotalValue());
+            }
+        }
+        total_sales_debit = total_sales_debit.divide(total_revenue);
+        total_sales_debit = total_sales_debit.multiply(new BigDecimal("100.0"));
+        return total_sales_debit;
     }
 }
